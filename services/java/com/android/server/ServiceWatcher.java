@@ -124,11 +124,11 @@ public class ServiceWatcher implements ServiceConnection {
             try {
                 PackageInfo pInfo;
                 pInfo = mPm.getPackageInfo(packageName, PackageManager.GET_SIGNATURES);
-                if (!isSignatureMatch(pInfo.signatures)) {
+                /*if (!isSignatureMatch(pInfo.signatures)) {
                     Log.w(mTag, packageName + " resolves service " + mAction +
                             ", but has wrong signature, ignoring");
                     continue;
-                }
+                }*/
             } catch (NameNotFoundException e) {
                 Log.wtf(mTag, e);
                 continue;
