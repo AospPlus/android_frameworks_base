@@ -266,7 +266,9 @@ public class TransportControlView extends FrameLayout implements OnClickListener
 
     private void updateMetadata(Bundle data) {
         if (mAttached) {
-            mMetadata.artist = getMdString(data, MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST);
+						mMetadata.artist = getMdString(data, MediaMetadataRetriever.METADATA_KEY_ARTIST);
+            if(TextUtils.isEmpty(mMetadata.artist)
+                mMetadata.artist = getMdString(data, MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST);
             mMetadata.trackTitle = getMdString(data, MediaMetadataRetriever.METADATA_KEY_TITLE);
             mMetadata.albumTitle = getMdString(data, MediaMetadataRetriever.METADATA_KEY_ALBUM);
             populateMetadata();
