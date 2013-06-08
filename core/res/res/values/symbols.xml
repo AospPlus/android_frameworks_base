@@ -1829,5 +1829,4 @@
   <!-- Reboot confirmation string -->
   <java-symbol type="string" name="reboot_confirm" />
 
-  
 </resources>
