@@ -65,7 +65,8 @@
             android:layout_marginEnd="16dip"
             android:gravity="center_horizontal"
             android:singleLine="true"
-            android:ellipsize="end"
+            android:ellipsize="marquee"
+            android:marqueeRepeatLimit="marquee_forever"
             android:textAppearance="?android:attr/textAppearanceMedium"
         />
         <TextView
