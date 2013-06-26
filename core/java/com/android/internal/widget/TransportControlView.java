@@ -299,10 +299,10 @@ public class TransportControlView extends FrameLayout implements OnClickListener
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         if (!TextUtils.isEmpty(mMetadata.trackTitle)) {
-            mTrackTitle.setText(mMetadata.trackTitle, TextView.BufferType.SPANNABLE);
-            Spannable str = (Spannable) mTrackTitle.getText();
-            str.setSpan(new ForegroundColorSpan(0xffffffff), 0, mTrackTitle.getText().length(),
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            mTrackTitle.setText(mMetadata.trackTitle, TextView.BufferType.NORMAL);
+            //Spannable str = (Spannable) mTrackTitle.getText();
+            //str.setSpan(new ForegroundColorSpan(0xffffffff), 0, mTrackTitle.getText().length(),
+            //        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
 
         mAlbumArt.setImageBitmap(mMetadata.bitmap);
