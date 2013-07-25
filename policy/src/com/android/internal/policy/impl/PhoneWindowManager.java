@@ -857,34 +857,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    private void preloadRecentApps() {
-        try {
-            IStatusBarService statusbar = getStatusBarService();
-            if (statusbar != null) {
-                statusbar.preloadRecentApps();
-                mRecentAppsPreloaded = true;
-            }
-        } catch (RemoteException e) {
-            Slog.e(TAG, "RemoteException when preloading recent apps", e);
-            // re-acquire status bar service next time it is needed.
-            mStatusBarService = null;
-        }
-    }
-
-    private void cancelPreloadRecentApps() {
-        try {
-            IStatusBarService statusbar = getStatusBarService();
-            if (statusbar != null) {
-                statusbar.cancelPreloadRecentApps();
-                mRecentAppsPreloaded = false;
-            }
-        } catch (RemoteException e) {
-            Slog.e(TAG, "RemoteException when showing recent apps", e);
-            // re-acquire status bar service next time it is needed.
-            mStatusBarService = null;
-        }
-    }
-
     private final Runnable mHomeDoubleTapTimeoutRunnable = new Runnable() {
         @Override
         public void run() {
@@ -2072,8 +2044,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // If we have released the home key, and didn't do anything else
             // while it was pressed, then it is time to go home!
             if (!down) {
-                cancelPreloadRecentApps();
-
+                final boolean homeWasLongPressed = mHomeLongPressed; 
                 mHomePressed = false;
                 if (mHomeConsumed) {
                     mHomeConsumed = false;
@@ -2084,6 +2055,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if (mRecentAppsPreloaded) {
                         cancelPreloadRecentApps();
                     }
+                }
 
                 if (canceled) {
                     Log.i(TAG, "Ignoring HOME; event canceled.");
