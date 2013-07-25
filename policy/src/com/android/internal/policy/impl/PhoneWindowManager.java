@@ -800,6 +800,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         if (mDoubleTapOnHomeBehavior == DOUBLE_TAP_HOME_RECENT_SYSTEM_UI) {
             mHomeConsumed = true;
             toggleRecentApps();
+        }
     }
 
     private void triggerVirtualKeypress(final int keyCode) {
