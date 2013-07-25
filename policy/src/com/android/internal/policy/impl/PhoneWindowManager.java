@@ -882,7 +882,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             Slog.e(TAG, "RemoteException when showing recent apps", e);
             // re-acquire status bar service next time it is needed.
             mStatusBarService = null;
->>>>>>> d620a43... Changes for custom hardware key bindings
         }
     }
 
