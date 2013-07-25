@@ -377,9 +377,7 @@ class QuickSettings {
 
     private void addSystemTiles(ViewGroup parent, LayoutInflater inflater) {
         // Battery
-        QuickSettingsTileView batteryTile = (QuickSettingsTileView)
-                inflater.inflate(R.layout.quick_settings_tile, parent, false);
-        batteryTile.setContent(R.layout.quick_settings_tile_battery, inflater);
+        final QuickSettingsBasicTile batteryTile = new QuickSettingsBasicTile(mContext);
         batteryTile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -388,11 +386,9 @@ class QuickSettings {
         });
         mModel.addBatteryTile(batteryTile, new QuickSettingsModel.RefreshCallback() {
             @Override
-            public void refreshView(QuickSettingsTileView view, State state) {
+            public void refreshView(QuickSettingsTileView unused, State state) {
                 QuickSettingsModel.BatteryState batteryState =
                         (QuickSettingsModel.BatteryState) state;
-                TextView tv = (TextView) view.findViewById(R.id.battery_textview);
-                ImageView iv = (ImageView) view.findViewById(R.id.battery_image);
                 Drawable d = batteryState.pluggedIn
                         ? mChargingBatteryLevels
                         : mBatteryLevels;
@@ -406,10 +402,10 @@ class QuickSettings {
                         : mContext.getString(R.string.status_bar_settings_battery_meter_format,
                                 batteryState.batteryLevel);
                 }
-                iv.setImageDrawable(d);
-                iv.setImageLevel(batteryState.batteryLevel);
-                tv.setText(t);
-                view.setContentDescription(
+                batteryTile.setImageDrawable(d);
+                batteryTile.getImageView().setImageLevel(batteryState.batteryLevel);
+                batteryTile.setText(t);
+                batteryTile.setContentDescription(
                         mContext.getString(R.string.accessibility_quick_settings_battery, t));
             }
         });
@@ -575,22 +571,20 @@ class QuickSettings {
             parent.addView(bluetoothTile);
         }
 
-        // Airplane Mode
-        QuickSettingsTileView airplaneTile = (QuickSettingsTileView)
-                inflater.inflate(R.layout.quick_settings_tile, parent, false);
-        airplaneTile.setContent(R.layout.quick_settings_tile_airplane, inflater);
+        //Airplane Mode
+        final QuickSettingsBasicTile airplaneTile
+                = new QuickSettingsBasicTile(mContext);
         mModel.addAirplaneModeTile(airplaneTile, new QuickSettingsModel.RefreshCallback() {
             @Override
-            public void refreshView(QuickSettingsTileView view, State state) {
-                TextView tv = (TextView) view.findViewById(R.id.airplane_mode_textview);
-                tv.setCompoundDrawablesWithIntrinsicBounds(0, state.iconId, 0, 0);
+            public void refreshView(QuickSettingsTileView unused, State state) {
+                airplaneTile.setImageResource(state.iconId);
 
                 String airplaneState = mContext.getString(
                         (state.enabled) ? R.string.accessibility_desc_on
                                 : R.string.accessibility_desc_off);
-                view.setContentDescription(
+                airplaneTile.setContentDescription(
                         mContext.getString(R.string.accessibility_quick_settings_airplane, airplaneState));
-                tv.setText(state.label);
+                airplaneTile.setText(state.label);
             }
         });
         parent.addView(airplaneTile);
