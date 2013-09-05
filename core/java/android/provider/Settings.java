@@ -2357,7 +2357,7 @@ public final class Settings {
           * (See KEY_HOME_LONG_PRESS_ACTION for valid values)
           * @hide
           */
-         public static final String KEY_HOME_DOUBLE_TAP_ACTION = "key_app_switch_action";
+         public static final String KEY_HOME_DOUBLE_TAP_ACTION = "key_home_double_tap_action";
 
          /**
           * Action to perform when the app switch key is pressed. (Default is 2)
