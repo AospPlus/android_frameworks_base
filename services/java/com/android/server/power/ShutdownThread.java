@@ -21,6 +21,7 @@ import android.app.ActivityManagerNative;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.IActivityManager;
+import android.app.KeyguardManager;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.IBluetoothManager;
@@ -46,6 +47,7 @@ import android.os.storage.IMountShutdownObserver;
 import com.android.internal.telephony.ITelephony;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.WindowManager;
 
 public final class ShutdownThread extends Thread {
@@ -67,6 +69,7 @@ public final class ShutdownThread extends Thread {
     private static boolean mReboot;
     private static boolean mRebootSafeMode;
     private static String mRebootReason;
+    private static boolean mRebootShowOptions;
 
     // Provides shutdown assurance in case the system_server is killed
     public static final String SHUTDOWN_ACTION_PROPERTY = "sys.shutdown.requested";
@@ -145,6 +148,37 @@ public final class ShutdownThread extends Thread {
             if (sConfirmDialog != null) {
                 sConfirmDialog.dismiss();
                 sConfirmDialog = null;
+
+            }
+            KeyguardManager km = (KeyguardManager) context.getSystemService(Context.KEYGUARD_SERVICE);
+            boolean locked = km.inKeyguardRestrictedInputMode() && km.isKeyguardSecure();
+
+            if (mRebootShowOptions && !locked){
+                sConfirmDialog = new AlertDialog.Builder(context)
+                        .setTitle(titleResourceId)
+                        .setItems(com.android.internal.R.array.shutdown_reboot_options, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (which < 0)
+                                    return;
+
+                                String actions[] = context.getResources().getStringArray(com.android.internal.R.array.shutdown_reboot_actions);
+
+                                if (actions != null && which < actions.length){
+                                    mRebootReason = actions[which];
+                                    beginShutdownSequence(context);
+                                }
+                            }
+                        })
+                        .create();
+                sConfirmDialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    public boolean onKey (DialogInterface dialog, int keyCode, KeyEvent event) {
+                        if (keyCode == KeyEvent.KEYCODE_BACK) {
+                            mReboot = false;
+                            dialog.cancel();
+                        }
+                        return true;
+                    }
+                });
             }
             if (sConfirmDialog == null) {
                 sConfirmDialog = new AlertDialog.Builder(context)
@@ -200,7 +234,12 @@ public final class ShutdownThread extends Thread {
     public static void reboot(final Context context, String reason, boolean confirm) {
         mReboot = true;
         mRebootSafeMode = false;
-        mRebootReason = reason;
+        if(reason != null && reason.equals("showOptions"))
+            mRebootShowOptions = true;
+        else{
+            mRebootReason = reason;
+            mRebootShowOptions = false;
+        }
         shutdownInner(context, confirm);
     }
 
@@ -214,6 +253,7 @@ public final class ShutdownThread extends Thread {
     public static void rebootSafeMode(final Context context, boolean confirm) {
         mReboot = true;
         mRebootSafeMode = true;
+        mRebootShowOptions = false;
         mRebootReason = null;
         shutdownInner(context, confirm);
     }
