@@ -64,7 +64,7 @@ class KeyguardMessageArea extends TextView {
     private static final String TAG = "KeyguardMessageArea";
 
     // are we showing battery information?
-    boolean mShowingBatteryInfo = false;
+    boolean mShowingBatteryInfo = true;
 
     // is the bouncer up?
     boolean mShowingBouncer = false;
@@ -155,7 +155,6 @@ class KeyguardMessageArea extends TextView {
     private KeyguardUpdateMonitorCallback mInfoCallback = new KeyguardUpdateMonitorCallback() {
         @Override
         public void onRefreshBatteryInfo(KeyguardUpdateMonitor.BatteryStatus status) {
-            mShowingBatteryInfo = status.isPluggedIn() || status.isBatteryLow();
             mCharging = status.status == BatteryManager.BATTERY_STATUS_CHARGING
                      || status.status == BatteryManager.BATTERY_STATUS_FULL;
             mBatteryLevel = status.level;
@@ -257,7 +256,7 @@ class KeyguardMessageArea extends TextView {
 
     private CharSequence getChargeInfo(MutableInt icon) {
         CharSequence string = null;
-        if (mShowingBatteryInfo && !mShowingMessage) {
+        if (!mShowingMessage) {
             // Battery status
             if (mCharging) {
                 // Charging, charged or waiting to charge.
@@ -267,8 +266,10 @@ class KeyguardMessageArea extends TextView {
                 icon.value = CHARGING_ICON;
             } else if (mBatteryIsLow) {
                 // Battery is low
-                string = getContext().getString(R.string.keyguard_low_battery);
+                string = getContext().getString(R.string.keyguard_low_battery, mBatteryLevel);
                 icon.value = BATTERY_LOW_ICON;
+            } else {
+                string = getContext().getString(R.string.keyguard_discharging, mBatteryLevel);
             }
         }
         return string;
