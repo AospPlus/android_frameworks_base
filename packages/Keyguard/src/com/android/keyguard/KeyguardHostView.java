@@ -406,6 +406,7 @@ public class KeyguardHostView extends KeyguardViewBase {
         showPrimarySecurityScreen(false);
         updateSecurityViews();
         enableUserSelectorIfNecessary();
+        minimizeChallenge();
     }
 
     private void updateAndAddWidgets() {
@@ -1050,6 +1051,7 @@ public class KeyguardHostView extends KeyguardViewBase {
             mViewStateManager.showUsabilityHints();
         }
 
+        minimizeChallenge();
         requestFocus();
     }
 
@@ -1784,4 +1786,11 @@ public class KeyguardHostView extends KeyguardViewBase {
         mContext.registerReceiver(receiver, new IntentFilter(INTENT_UNLOCK_DEVICE),
             "com.android.permission.HANDOVER_STATUS", null);
   }
+
+  private void minimizeChallenge() {
+      if (mSlidingChallengeLayout != null && mLockPatternUtils.getMaximizeWidgetsEnabled() == true){
+          mSlidingChallengeLayout.showChallenge(false);
+      }
+  }
+
 }

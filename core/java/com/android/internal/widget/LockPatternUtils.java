@@ -1372,4 +1372,20 @@ public class LockPatternUtils {
         setBoolean(LOCKSCREEN_WIDGETS_ENABLED, enabled, userId);
     }
 
+    public boolean getMaximizeWidgetsEnabled() {
+        return getMaximizeWidgetsEnabled(getCurrentOrCallingUserId());
+    }
+
+    public boolean getMaximizeWidgetsEnabled(int userId) {
+        return getBoolean(Settings.System.LOCK_SCREEN_MAXIMIZE_WIDGETS, false, userId);
+    }
+
+    public void setMaximizeWidgetsEnabled(boolean enabled) {
+        setMaximizeWidgetsEnabled(enabled, getCurrentOrCallingUserId());
+    }
+
+    public void setMaximizeWidgetsEnabled(boolean enabled, int userId) {
+        setBoolean(Settings.System.LOCK_SCREEN_MAXIMIZE_WIDGETS, enabled, userId);
+    }
+
 }

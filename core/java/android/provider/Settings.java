@@ -1770,6 +1770,13 @@ public final class Settings {
 
 
         /**
+         * Whether to maximize widgets by default on lockscreen.
+         * @hide
+         */
+        public static final String LOCK_SCREEN_MAXIMIZE_WIDGETS =
+            "keyguard_maximize_widgets";
+
+        /**
          * A formatted string of the next alarm that is set, or the empty string
          * if there is no alarm set.
          */
