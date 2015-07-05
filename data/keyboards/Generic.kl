@@ -146,7 +146,7 @@ key 123   EISU
 key 124   YEN
 key 125   HOME
 key 126   HOME
-key 127   MENU
+key 127   APP_SWITCH
 key 128   MEDIA_STOP
 # key 129 "KEY_AGAIN"
 # key 130 "KEY_PROPS"
